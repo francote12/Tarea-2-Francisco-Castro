@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tarea 2 Francisco Castro</title>
+
+    <meta charset="UTF-8" />
+	
+    <!-- Referencia a estilos personales -->
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <!-- Referencia al código fuente y a los estilos de Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+	  
+    <!-- Referencia al código fuente y a los estilos del complemento MousePosition -->	 
+    <script type="text/javascript" src="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.css"/>	  
+  </head>
+
+  <body>
+    <h1>Poblacion de Cantones de Costa Rica</h1>
+    <div id='map'></div>
+
+    <script src="js/cantones2014.js" type="text/javascript"></script>
+
+
+    <script>
+      var mapa = L.map('map').setView([9.7, -84], 8);
+      var osm  = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '<a href="http://www.openstreetmap.org/">OpenStreetMap</a>'
+      });
+      
+ 
+      osm.addTo(mapa);
+     
+	    
+      // retorna un color con base en la cantidad de especies
+      function color(d) {
+	return d > 300000 ? '#f90707' :
+	       d > 120000 ? '#ff4c4c' :
+	       d > 50000 ? '#f7a0a0' :
+		   d > 30000 ? '#f7d9d9' :
+	     	        '#fcfcfc';
+      }	    
+      
+	  // Aqui coloco las etiqutas del cantón 
+	  function infoPoblacion(feature, layer) {
+	var popupContent = " ";
+	
+	if (feature.properties && feature.properties.POB_2011_T) {
+	  popupContent +="Poblacion año 2011: "+ feature.properties.POB_2011_T;
+	  }
+	
+	if (feature.properties && feature.properties.NCANTON) {
+	  popupContent +="<br> Cantón: "+  feature.properties.NCANTON;
+	} else {
+	  popupContent += 0; 
+	}
+	layer.bindPopup(popupContent);
+      }	    	    
+	  // Aqui coloco los colores para cada mapa de acuerdo a la funcion color 8d)n   
+      var poblacion = L.geoJson(cantones2014, {
+        style: function (feature) {
+	  return {
+	    weight: 2,
+	    opacity: 1,
+	    color: 'white',
+	    dashArray: '3',
+	    fillOpacity: 0.7,		  
+            fillColor: color(feature.properties.POB_2011_T)
+          };
+        },
+	      
+	onEachFeature: infoPoblacion
+      })
+      poblacion.addTo(mapa);
+	        
+	   
+	    
+	    
+	    
+      var baseLayers = {
+	"OpenStreetMap": osm,
+
+      };
+      var overlays = {
+	"Cantones": poblacion,
+
+      };
+      L.control.layers(baseLayers, overlays).addTo(mapa);
+	    
+      L.control.mousePosition().addTo(mapa);
+
+    </script>
+  </body>
+</html>
