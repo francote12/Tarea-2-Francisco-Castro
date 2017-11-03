@@ -16,9 +16,6 @@
     <script type="text/javascript" src="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.js"></script>
     <link rel="stylesheet" href="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.css"/>	  
  
-   <!-- Referencia al complemento Leaflet-providers -->	 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.7/leaflet-providers.js"></script>
-	
 </head>
 
   <body>
@@ -30,15 +27,23 @@
 
     <script>
       var mapa = L.map('map').setView([9.7, -84], 8);
-      var osm  = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      
+	var osm  = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '<a href="http://www.openstreetmap.org/">OpenStreetMap</a>';
           // Capa de tipo L.tileLayer definida con el complemento Leaflet-providers
-      var topo = L.tileLayer.provider('OpenTopoMap'); 
+   
       });
       
  
       osm.addTo(mapa);
-     
+	//Aqui agrego la varible topo map    
+     var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+});
+
+	    topo.addTo(mapa);
+	    
 	    
       // retorna un color con base en la cantidad de especies
       function color(d) {
@@ -87,7 +92,8 @@
 	    
       var baseLayers = {
 	"OpenStreetMap": osm,
-        "OpenTopoMap" : topo
+	""OpenTopoMap: Topografia
+	      
       };
       var overlays = {
 	"Cantones": poblacion,
