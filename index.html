@@ -15,7 +15,11 @@
     <!-- Referencia al código fuente y a los estilos del complemento MousePosition -->	 
     <script type="text/javascript" src="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.js"></script>
     <link rel="stylesheet" href="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.css"/>	  
-  </head>
+ 
+   <!-- Referencia al complemento Leaflet-providers -->	 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.7/leaflet-providers.js"></script>
+	
+</head>
 
   <body>
     <h1>Poblacion de Cantones de Costa Rica</h1>
@@ -27,7 +31,9 @@
     <script>
       var mapa = L.map('map').setView([9.7, -84], 8);
       var osm  = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="http://www.openstreetmap.org/">OpenStreetMap</a>'
+        attribution: '<a href="http://www.openstreetmap.org/">OpenStreetMap</a>';
+          // Capa de tipo L.tileLayer definida con el complemento Leaflet-providers
+      var topo = L.tileLayer.provider('OpenTopoMap'); 
       });
       
  
@@ -81,7 +87,7 @@
 	    
       var baseLayers = {
 	"OpenStreetMap": osm,
-
+        "OpenTopoMap" : topo
       };
       var overlays = {
 	"Cantones": poblacion,
